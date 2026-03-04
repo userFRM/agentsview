@@ -285,19 +285,19 @@ func TestExtractToolResults(t *testing.T) {
 		{
 			"single tool_result",
 			`[{"type":"tool_result","tool_use_id":"toolu_123","content":"file contents here"}]`,
-			[]ParsedToolResult{{ToolUseID: "toolu_123", ContentLength: 18, Content: "file contents here"}},
+			[]ParsedToolResult{{ToolUseID: "toolu_123", ContentLength: 18, RawContent: `"file contents here"`}},
 		},
 		{
 			"tool_result with array content",
 			`[{"type":"tool_result","tool_use_id":"toolu_456","content":[{"type":"text","text":"output data"}]}]`,
-			[]ParsedToolResult{{ToolUseID: "toolu_456", ContentLength: 11, Content: "output data"}},
+			[]ParsedToolResult{{ToolUseID: "toolu_456", ContentLength: 11, RawContent: `[{"type":"text","text":"output data"}]`}},
 		},
 		{
 			"multiple tool_results",
 			`[{"type":"tool_result","tool_use_id":"toolu_1","content":"abc"},{"type":"tool_result","tool_use_id":"toolu_2","content":"defgh"}]`,
 			[]ParsedToolResult{
-				{ToolUseID: "toolu_1", ContentLength: 3, Content: "abc"},
-				{ToolUseID: "toolu_2", ContentLength: 5, Content: "defgh"},
+				{ToolUseID: "toolu_1", ContentLength: 3, RawContent: `"abc"`},
+				{ToolUseID: "toolu_2", ContentLength: 5, RawContent: `"defgh"`},
 			},
 		},
 	}
@@ -318,9 +318,9 @@ func TestExtractToolResults(t *testing.T) {
 					t.Errorf("[%d].ContentLength = %d, want %d",
 						i, trs[i].ContentLength, tt.wantResults[i].ContentLength)
 				}
-				if trs[i].Content != tt.wantResults[i].Content {
-					t.Errorf("[%d].Content = %q, want %q",
-						i, trs[i].Content, tt.wantResults[i].Content)
+				if trs[i].RawContent != tt.wantResults[i].RawContent {
+					t.Errorf("[%d].RawContent = %q, want %q",
+						i, trs[i].RawContent, tt.wantResults[i].RawContent)
 				}
 			}
 		})

@@ -238,7 +238,7 @@ type ParsedToolCall struct {
 type ParsedToolResult struct {
 	ToolUseID     string
 	ContentLength int
-	Content       string
+	RawContent    string // raw JSON of the content field (lazy extraction)
 }
 
 // ParsedMessage holds a single extracted message.

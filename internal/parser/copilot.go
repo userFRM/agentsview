@@ -182,6 +182,7 @@ func (b *copilotSessionBuilder) handleToolComplete(
 		ToolResults: []ParsedToolResult{{
 			ToolUseID:     toolCallID,
 			ContentLength: contentLen,
+			RawContent:    r.Raw,
 		}},
 	})
 	b.ordinal++

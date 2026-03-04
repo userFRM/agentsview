@@ -42,10 +42,12 @@ type ToolCall struct {
 }
 
 // ToolResult holds a tool_result content block for pairing.
+// RawContent stores the raw JSON; text extraction is deferred
+// to pairing so blocked categories never allocate content.
 type ToolResult struct {
 	ToolUseID     string
 	ContentLength int
-	Content       string
+	RawContent    string
 }
 
 // Message represents a row in the messages table.

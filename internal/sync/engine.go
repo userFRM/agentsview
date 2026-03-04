@@ -1739,7 +1739,7 @@ func convertToolResults(
 		results[i] = db.ToolResult{
 			ToolUseID:     tr.ToolUseID,
 			ContentLength: tr.ContentLength,
-			Content:       tr.Content,
+			RawContent:    tr.RawContent,
 		}
 	}
 	return results
@@ -1782,8 +1782,8 @@ func pairToolResults(msgs []db.Message, blocked map[string]bool) {
 		for _, tr := range m.ToolResults {
 			if tc, ok := idx[tr.ToolUseID]; ok {
 				tc.ResultContentLength = tr.ContentLength
-				if !blocked[tc.Category] {
-					tc.ResultContent = tr.Content
+				if !blocked[tc.Category] && tr.RawContent != "" {
+					tc.ResultContent = parser.ExtractToolResultContent(tr.RawContent)
 				}
 			}
 		}

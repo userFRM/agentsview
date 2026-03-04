@@ -68,11 +68,10 @@ func ExtractTextContent(
 			tuid := block.Get("tool_use_id").Str
 			if tuid != "" {
 				rc := block.Get("content")
-				cl := toolResultContentLength(rc)
 				toolResults = append(toolResults, ParsedToolResult{
 					ToolUseID:     tuid,
-					ContentLength: cl,
-					Content:       toolResultContent(rc),
+					ContentLength: toolResultContentLength(rc),
+					RawContent:    rc.Raw,
 				})
 			}
 		}
@@ -98,7 +97,14 @@ func toolResultContentLength(content gjson.Result) int {
 	return 0
 }
 
-func toolResultContent(content gjson.Result) string {
+// ExtractToolResultContent extracts readable text from a raw tool
+// result content JSON value (string or array of text blocks).
+func ExtractToolResultContent(raw string) string {
+	content := gjson.Parse(raw)
+	return extractToolResultContent(content)
+}
+
+func extractToolResultContent(content gjson.Result) string {
 	if content.Type == gjson.String {
 		return content.Str
 	}

@@ -23,13 +23,17 @@
   let collapsed: boolean = $state(true);
   let outputCollapsed: boolean = $state(true);
 
+  function firstLine(s: string): string {
+    const nl = s.indexOf("\n");
+    const line = nl >= 0 ? s.slice(0, nl) : s;
+    return line.slice(0, 100);
+  }
+
   let outputPreviewLine = $derived(
-    toolCall?.result_content?.split("\n")[0]?.slice(0, 100) ?? "",
+    toolCall?.result_content ? firstLine(toolCall.result_content) : "",
   );
 
-  let previewLine = $derived(
-    content.split("\n")[0]?.slice(0, 100) ?? "",
-  );
+  let previewLine = $derived(firstLine(content));
 
   /** Parsed input parameters from structured tool call data */
   let inputParams = $derived.by(() => {
